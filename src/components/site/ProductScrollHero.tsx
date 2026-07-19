@@ -1,150 +1,416 @@
-import { useEffect, useRef, useState } from "react";
-import { ArrowRight, ChevronDown } from "lucide-react";
-import cupAsset from "@/assets/barista-cup.png.asset.json";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { ArrowRight } from "lucide-react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-/**
- * ProductScrollHero
- * -----------------
- * Cinematic hero for Barista's Plant-Based Almond Milk Cappuccino.
- *
- * NOTE (stage 2 — not implemented yet):
- * This component intentionally keeps the Barista cup as a *static* image.
- * In the next development stage, the <img> inside `hero-cup` will be
- * replaced by an HTML <canvas> element driven by a scroll-controlled
- * WebP frame sequence (preloaded frames + IntersectionObserver + rAF).
- * The surrounding layout, spotlight, reflection and copy stay identical
- * so the canvas can drop in without touching the rest of the section.
- */
+gsap.registerPlugin(ScrollTrigger);
+
+const DESKTOP_COUNT = 64;
+const MOBILE_COUNT = 53;
+const MOBILE_BP = 768;
+
+function framePath(isMobile: boolean, i: number) {
+  const n = String(i).padStart(4, "0");
+  return `/coffee-sequence/${isMobile ? "mobile" : "desktop"}/frame_${n}.webp`;
+}
+
+type TextStep = {
+  eyebrow?: string;
+  heading: string[];
+  sub?: string;
+  cta?: boolean;
+};
+
+const STEPS: { from: number; to: number; content: TextStep }[] = [
+  {
+    from: 0,
+    to: 0.22,
+    content: {
+      eyebrow: "Barista Plant-Based Collection",
+      heading: ["CREAMY.", "NUTTY.", "PLANT-POWERED."],
+    },
+  },
+  { from: 0.22, to: 0.44, content: { heading: ["BOLD ESPRESSO", "AT ITS HEART."] } },
+  { from: 0.44, to: 0.66, content: { heading: ["SMOOTH ALMOND", "GOODNESS."] } },
+  { from: 0.66, to: 0.84, content: { heading: ["CREAMY WITHOUT", "THE DAIRY."] } },
+  {
+    from: 0.84,
+    to: 1.0,
+    content: {
+      heading: ["ALMOND MILK", "CAPPUCCINO."],
+      sub: "Bold espresso, silky plant-based foam and a naturally nutty finish.",
+      cta: true,
+    },
+  },
+];
+
+function prefersReducedMotion() {
+  if (typeof window === "undefined") return false;
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
 export function ProductScrollHero() {
-  const cupRef = useRef<HTMLDivElement>(null);
-  const [t, setT] = useState(0); // 0..1 hero scroll progress
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const stickyRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const staticImgRef = useRef<HTMLImageElement>(null);
 
+  const [progress, setProgress] = useState(0);
+  const [loadPct, setLoadPct] = useState(0);
+  const [ready, setReady] = useState(false);
+  const [reduced] = useState(prefersReducedMotion());
+
+  // Refs for imperative animation state
+  const framesRef = useRef<HTMLImageElement[]>([]);
+  const loadedRef = useRef<boolean[]>([]);
+  const isMobileRef = useRef<boolean>(false);
+  const rafRef = useRef<number | null>(null);
+  const targetIdxRef = useRef(0);
+  const drawnIdxRef = useRef(-1);
+
+  // Preloading logic
   useEffect(() => {
-    const onScroll = () => {
-      const el = cupRef.current;
-      if (!el) return;
-      const vh = window.innerHeight;
-      const y = Math.min(Math.max(window.scrollY / vh, 0), 1);
-      setT(y);
+    if (reduced) return;
+    let cancelled = false;
+
+    function currentIsMobile() {
+      return window.innerWidth < MOBILE_BP;
+    }
+
+    function loadFrame(i: number, mobile: boolean): Promise<void> {
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.decoding = "async";
+        img.onload = () => {
+          if (cancelled || currentIsMobile() !== mobile) return resolve();
+          framesRef.current[i] = img;
+          loadedRef.current[i] = true;
+          resolve();
+        };
+        img.onerror = () => resolve();
+        img.src = framePath(mobile, i + 1);
+      });
+    }
+
+    async function loadSequence() {
+      const mobile = currentIsMobile();
+      isMobileRef.current = mobile;
+      const count = mobile ? MOBILE_COUNT : DESKTOP_COUNT;
+      framesRef.current = new Array(count);
+      loadedRef.current = new Array(count).fill(false);
+      drawnIdxRef.current = -1;
+      setReady(false);
+      setLoadPct(0);
+
+      // 1. First frame
+      await loadFrame(0, mobile);
+      if (cancelled || isMobileRef.current !== mobile) return;
+      requestDraw();
+
+      // 2. Every 8th
+      const keyIdx: number[] = [];
+      for (let i = 8; i < count; i += 8) keyIdx.push(i);
+      let done = 1;
+      const essentialTotal = 1 + keyIdx.length;
+      await Promise.all(
+        keyIdx.map((i) =>
+          loadFrame(i, mobile).then(() => {
+            done++;
+            setLoadPct(Math.min(99, Math.round((done / essentialTotal) * 100)));
+          }),
+        ),
+      );
+      if (cancelled || isMobileRef.current !== mobile) return;
+      setLoadPct(100);
+      setReady(true);
+      requestDraw();
+
+      // 3. Remaining progressively
+      for (let i = 1; i < count; i++) {
+        if (cancelled || isMobileRef.current !== mobile) return;
+        if (!loadedRef.current[i]) {
+          await loadFrame(i, mobile);
+          requestDraw();
+        }
+      }
+    }
+
+    loadSequence();
+
+    const onResize = () => {
+      const mobile = currentIsMobile();
+      if (mobile !== isMobileRef.current) {
+        loadSequence();
+      }
+      resizeCanvas();
+      requestDraw();
     };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+    window.addEventListener("resize", onResize);
 
-  const cupTransform = `translate3d(0, ${t * -40}px, 0) scale(${1 - t * 0.05})`;
+    return () => {
+      cancelled = true;
+      window.removeEventListener("resize", onResize);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [reduced]);
 
-  return (
-    <section
-      id="home"
-      className="relative min-h-[100svh] w-full overflow-hidden bg-ink grain"
-      aria-label="Barista Plant-Based Almond Milk Cappuccino hero"
-    >
-      {/* Ambient orange glow */}
-      <div className="pointer-events-none absolute inset-0 spotlight opacity-70" />
-      <div className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 size-[900px] rounded-full bg-orange/10 blur-[140px]" />
+  function resizeCanvas() {
+    const canvas = canvasRef.current;
+    const sticky = stickyRef.current;
+    if (!canvas || !sticky) return;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const rect = sticky.getBoundingClientRect();
+    canvas.width = Math.round(rect.width * dpr);
+    canvas.height = Math.round(rect.height * dpr);
+    canvas.style.width = `${rect.width}px`;
+    canvas.style.height = `${rect.height}px`;
+  }
 
-      <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-[1400px] flex-col items-center justify-between px-5 pt-28 pb-10 md:px-10 md:pt-32">
-        {/* Top eyebrow */}
-        <div className="text-center reveal-up">
+  function findNearestLoaded(idx: number): HTMLImageElement | null {
+    const loaded = loadedRef.current;
+    const frames = framesRef.current;
+    if (frames[idx] && loaded[idx]) return frames[idx];
+    for (let d = 1; d < frames.length; d++) {
+      const a = idx - d;
+      if (a >= 0 && loaded[a]) return frames[a];
+      const b = idx + d;
+      if (b < frames.length && loaded[b]) return frames[b];
+    }
+    return null;
+  }
+
+  function draw() {
+    rafRef.current = null;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    const idx = targetIdxRef.current;
+    const img = findNearestLoaded(idx);
+    ctx.fillStyle = "#000";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    if (!img) return;
+    const cw = canvas.width;
+    const ch = canvas.height;
+    const iw = img.naturalWidth;
+    const ih = img.naturalHeight;
+    if (!iw || !ih) return;
+    const scale = Math.min(cw / iw, ch / ih);
+    const dw = iw * scale;
+    const dh = ih * scale;
+    const dx = (cw - dw) / 2;
+    const dy = (ch - dh) / 2;
+    ctx.drawImage(img, dx, dy, dw, dh);
+    drawnIdxRef.current = idx;
+  }
+
+  function requestDraw() {
+    if (rafRef.current != null) return;
+    rafRef.current = requestAnimationFrame(draw);
+  }
+
+  // ScrollTrigger setup
+  useLayoutEffect(() => {
+    if (reduced) return;
+    const wrap = wrapRef.current;
+    const sticky = stickyRef.current;
+    if (!wrap || !sticky) return;
+
+    resizeCanvas();
+    requestDraw();
+
+    const st = ScrollTrigger.create({
+      trigger: wrap,
+      start: "top top",
+      end: "bottom bottom",
+      scrub: 0.6,
+      onUpdate: (self) => {
+        const p = self.progress;
+        setProgress(p);
+        const count = (isMobileRef.current ? MOBILE_COUNT : DESKTOP_COUNT);
+        const idx = Math.min(count - 1, Math.max(0, Math.floor(p * (count - 1))));
+        if (idx !== targetIdxRef.current) {
+          targetIdxRef.current = idx;
+          requestDraw();
+        }
+      },
+    });
+
+    const onResize = () => {
+      resizeCanvas();
+      requestDraw();
+      ScrollTrigger.refresh();
+    };
+    window.addEventListener("resize", onResize);
+
+    return () => {
+      st.kill();
+      window.removeEventListener("resize", onResize);
+      if (rafRef.current != null) cancelAnimationFrame(rafRef.current);
+    };
+  }, [reduced]);
+
+  // ---------- Reduced-motion static fallback ----------
+  if (reduced) {
+    return (
+      <section
+        id="home"
+        className="relative min-h-[100svh] w-full overflow-hidden bg-ink grain"
+        aria-label="Barista Plant-Based Almond Milk Cappuccino hero"
+      >
+        <div className="pointer-events-none absolute inset-0 spotlight opacity-70" />
+        <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-[1400px] flex-col items-center justify-center gap-8 px-5 py-24 text-center md:px-10">
           <span className="eyebrow text-orange">Barista Plant-Based Collection</span>
-        </div>
-
-        {/* Center: heading + cup */}
-        <div className="grid w-full flex-1 grid-rows-[auto_1fr_auto] items-center gap-6 py-6 md:grid-cols-[1fr_auto_1fr] md:grid-rows-1 md:gap-8">
-          {/* Left copy (desktop) */}
-          <div className="hidden md:block text-left">
-            <h1 className="font-display text-6xl leading-[0.9] text-white lg:text-7xl xl:text-8xl reveal-up">
-              CREAMY.
-              <br />
-              NUTTY.
-              <br />
-              <span className="text-orange">PLANT-POWERED.</span>
-            </h1>
-          </div>
-
-          {/* Cup */}
-          <div
-            ref={cupRef}
-            className="hero-cup relative mx-auto flex items-center justify-center"
-            style={{ transform: cupTransform, transition: "transform 0.1s linear" }}
-          >
-            {/* Radial spotlight behind cup */}
-            <div className="absolute inset-0 -z-10 spotlight opacity-90" aria-hidden />
-            <img
-              src={cupAsset.url}
-              alt="Barista takeaway cup with orange BARISTA logo and closed white lid"
-              className="relative z-10 h-[38vh] md:h-[42vh] lg:h-[45vh] w-auto max-w-[80vw] object-contain drop-shadow-[0_40px_60px_rgba(0,0,0,0.7)] float-soft"
-              draggable={false}
-            />
-            {/* Reflection */}
-            <div
-              aria-hidden
-              className="absolute bottom-[-8%] left-1/2 -translate-x-1/2 h-6 w-[55%] rounded-[50%] bg-orange/40 blur-2xl"
-            />
-            <div
-              aria-hidden
-              className="absolute bottom-[-3%] left-1/2 -translate-x-1/2 h-3 w-[40%] rounded-[50%] bg-black/70 blur-md"
-            />
-          </div>
-
-          {/* Right copy (desktop) */}
-          <div className="hidden md:block text-right self-end">
-            <p className="ml-auto max-w-xs text-sm leading-relaxed text-white/70 reveal-up">
-              Meet our Plant-Based Almond Milk Cappuccino — bold espresso balanced with silky foam and a naturally nutty finish.
-            </p>
-            <div className="mt-6 flex justify-end gap-3">
-              <a
-                href="#product"
-                className="group inline-flex items-center gap-2 rounded-full bg-orange px-5 py-3 text-xs font-semibold uppercase tracking-widest text-white transition-all hover:bg-orange-glow hover:shadow-[0_20px_40px_-15px_rgba(240,82,35,0.7)]"
-              >
-                Discover the Flavour
-                <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
-              </a>
-              <a
-                href="#menu"
-                className="inline-flex items-center gap-2 rounded-full border border-white/20 px-5 py-3 text-xs font-semibold uppercase tracking-widest text-white/90 transition-colors hover:bg-white/5"
-              >
-                Explore the Menu
-              </a>
-            </div>
-          </div>
-        </div>
-
-        {/* Mobile heading + CTA under cup */}
-        <div className="md:hidden text-center reveal-up">
-          <h1 className="font-display text-5xl leading-[0.9] text-white">
-            CREAMY.
-            <br />
-            NUTTY.
+          <h1 className="font-display text-5xl leading-[0.9] text-white md:text-7xl">
+            CREAMY. NUTTY.
             <br />
             <span className="text-orange">PLANT-POWERED.</span>
           </h1>
-          <p className="mt-4 mx-auto max-w-sm text-sm leading-relaxed text-white/70">
-            Meet our Plant-Based Almond Milk Cappuccino — bold espresso balanced with silky foam and a naturally nutty finish.
+          <img
+            ref={staticImgRef}
+            src={framePath(false, 1)}
+            alt="Barista Plant-Based Almond Milk Cappuccino takeaway cup"
+            className="h-[50vh] w-auto object-contain"
+          />
+          <p className="max-w-md text-white/70">
+            Bold espresso, silky plant-based foam and a naturally nutty finish.
           </p>
-          <div className="mt-6 flex flex-col gap-3">
-            <a
-              href="#product"
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-orange px-6 py-4 text-xs font-semibold uppercase tracking-widest text-white"
-            >
-              Discover the Flavour <ArrowRight className="size-4" />
+          <div className="flex flex-wrap justify-center gap-3">
+            <a href="#product" className="rounded-full bg-orange px-6 py-3 text-xs font-semibold uppercase tracking-widest text-white">
+              Discover the Flavour
             </a>
-            <a
-              href="#menu"
-              className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 px-6 py-4 text-xs font-semibold uppercase tracking-widest text-white/90"
-            >
+            <a href="#menu" className="rounded-full border border-white/20 px-6 py-3 text-xs font-semibold uppercase tracking-widest text-white/90">
               Explore the Menu
             </a>
           </div>
         </div>
+      </section>
+    );
+  }
 
-        {/* Scroll indicator */}
-        <div className="mt-8 flex flex-col items-center gap-2 text-white/50">
-          <span className="text-[10px] font-semibold uppercase tracking-[0.4em]">
-            Scroll to Experience
-          </span>
-          <ChevronDown className="size-4 scroll-hint" />
+  return (
+    <section
+      id="home"
+      ref={wrapRef}
+      className="relative w-full bg-ink"
+      style={{ height: "350vh" }}
+      aria-label="Barista Plant-Based Almond Milk Cappuccino hero"
+    >
+      <div
+        ref={stickyRef}
+        className="sticky top-0 h-[100svh] w-full overflow-hidden bg-black"
+      >
+        <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
+
+        {/* Ambient orange glow overlay */}
+        <div className="pointer-events-none absolute inset-0 spotlight opacity-40" />
+
+        {/* Loading overlay */}
+        {!ready && (
+          <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-black text-white">
+            <span className="eyebrow text-orange">Brewing</span>
+            <div className="mt-4 font-display text-6xl tabular-nums md:text-7xl">
+              {String(loadPct).padStart(2, "0")}
+              <span className="text-orange">%</span>
+            </div>
+            <div className="mt-6 h-px w-40 overflow-hidden bg-white/10">
+              <div
+                className="h-full bg-orange transition-[width] duration-300"
+                style={{ width: `${loadPct}%` }}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Text timeline overlay */}
+        <div className="pointer-events-none absolute inset-0 z-20 mx-auto flex max-w-[1400px] flex-col justify-between px-5 pt-28 pb-16 md:px-10 md:pt-32">
+          {STEPS.map((step, i) => {
+            const active = progress >= step.from && progress <= step.to;
+            // local progress within step for gentle motion
+            const local = active
+              ? Math.min(1, Math.max(0, (progress - step.from) / (step.to - step.from)))
+              : 0;
+            const opacity = active
+              ? Math.min(1, local < 0.15 ? local / 0.15 : local > 0.85 ? (1 - local) / 0.15 : 1)
+              : 0;
+            const y = active ? (0.5 - local) * 24 : 20;
+            return (
+              <div
+                key={i}
+                className="absolute inset-0 flex flex-col items-center justify-center text-center transition-opacity"
+                style={{
+                  opacity,
+                  transform: `translate3d(0, ${y}px, 0)`,
+                  transition: "opacity 400ms ease, transform 600ms cubic-bezier(0.22,1,0.36,1)",
+                }}
+                aria-hidden={!active}
+              >
+                {step.content.eyebrow && (
+                  <span className="eyebrow mb-6 text-orange">{step.content.eyebrow}</span>
+                )}
+                {/* Push text away from cup center by placing at top and bottom bands */}
+                <div className="absolute top-[8%] left-0 right-0 px-6">
+                  <h2 className="font-display text-4xl leading-[0.9] text-white drop-shadow-[0_6px_24px_rgba(0,0,0,0.8)] md:text-6xl lg:text-7xl">
+                    {step.content.heading.map((line, li) => (
+                      <span
+                        key={li}
+                        className="block overflow-hidden"
+                        style={{
+                          transitionDelay: `${li * 80}ms`,
+                        }}
+                      >
+                        <span
+                          className="inline-block"
+                          style={{
+                            transform: active ? "translateY(0)" : "translateY(100%)",
+                            transition: `transform 700ms cubic-bezier(0.22,1,0.36,1) ${li * 80}ms`,
+                          }}
+                        >
+                          {li === step.content.heading.length - 1 && step.content.heading.length > 1 ? (
+                            <span className="text-orange">{line}</span>
+                          ) : (
+                            line
+                          )}
+                        </span>
+                      </span>
+                    ))}
+                  </h2>
+                </div>
+
+                {(step.content.sub || step.content.cta) && (
+                  <div className="pointer-events-auto absolute bottom-[10%] left-0 right-0 flex flex-col items-center gap-5 px-6">
+                    {step.content.sub && (
+                      <p className="max-w-md text-sm leading-relaxed text-white/80 md:text-base">
+                        {step.content.sub}
+                      </p>
+                    )}
+                    {step.content.cta && (
+                      <div className="flex flex-wrap justify-center gap-3">
+                        <a
+                          href="#product"
+                          className="group inline-flex items-center gap-2 rounded-full bg-orange px-6 py-3 text-xs font-semibold uppercase tracking-widest text-white transition-all hover:bg-orange-glow hover:shadow-[0_20px_40px_-15px_rgba(240,82,35,0.7)]"
+                        >
+                          Discover the Flavour
+                          <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+                        </a>
+                        <a
+                          href="#menu"
+                          className="inline-flex items-center gap-2 rounded-full border border-white/20 px-6 py-3 text-xs font-semibold uppercase tracking-widest text-white/90 transition-colors hover:bg-white/5"
+                        >
+                          Explore the Menu
+                        </a>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Scroll hint */}
+        <div className="pointer-events-none absolute bottom-4 left-1/2 z-20 -translate-x-1/2 text-[10px] font-semibold uppercase tracking-[0.4em] text-white/40">
+          Scroll to Experience
         </div>
       </div>
     </section>
