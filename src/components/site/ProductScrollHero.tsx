@@ -323,50 +323,53 @@ export function ProductScrollHero() {
         )}
 
         {/* Text timeline overlay */}
-        <div className="pointer-events-none absolute inset-0 z-20 mx-auto flex max-w-[1400px] flex-col justify-between px-5 pt-28 pb-16 md:px-10 md:pt-32">
+        <div className="pointer-events-none absolute inset-0 z-20">
           {STEPS.map((step, i) => {
             const active = progress >= step.from && progress <= step.to;
-            // local progress within step for gentle motion
             const local = active
               ? Math.min(1, Math.max(0, (progress - step.from) / (step.to - step.from)))
               : 0;
             const opacity = active
               ? Math.min(1, local < 0.15 ? local / 0.15 : local > 0.85 ? (1 - local) / 0.15 : 1)
               : 0;
-            const y = active ? (0.5 - local) * 24 : 20;
+            const y = active ? (0.5 - local) * 18 : 16;
+            const isFinal = !!step.content.cta;
             return (
               <div
                 key={i}
-                className="absolute inset-0 flex flex-col items-center justify-center text-center transition-opacity"
+                className="absolute inset-0"
                 style={{
                   opacity,
                   transform: `translate3d(0, ${y}px, 0)`,
-                  transition: "opacity 400ms ease, transform 600ms cubic-bezier(0.22,1,0.36,1)",
+                  transition: "opacity 400ms ease, transform 700ms cubic-bezier(0.22,1,0.36,1)",
                 }}
                 aria-hidden={!active}
               >
-                {step.content.eyebrow && (
-                  <span className="eyebrow mb-6 text-orange">{step.content.eyebrow}</span>
-                )}
-                {/* Push text away from cup center by placing at top and bottom bands */}
-                <div className="absolute top-[8%] left-0 right-0 px-6">
-                  <h2 className="font-display text-4xl leading-[0.9] text-white drop-shadow-[0_6px_24px_rgba(0,0,0,0.8)] md:text-6xl lg:text-7xl">
+                <div
+                  className="absolute max-w-[92%] md:max-w-[620px] lg:max-w-[720px] text-center md:text-left"
+                  style={{
+                    left: "clamp(20px, 7vw, 120px)",
+                    right: "clamp(20px, 5vw, 60px)",
+                    bottom: "clamp(80px, 12vh, 150px)",
+                  }}
+                >
+                  {step.content.eyebrow && (
+                    <span className="eyebrow mb-5 block text-orange">
+                      {step.content.eyebrow}
+                    </span>
+                  )}
+                  <h2 className="font-display text-[2.25rem] leading-[0.95] text-white drop-shadow-[0_6px_24px_rgba(0,0,0,0.85)] sm:text-5xl md:text-6xl lg:text-7xl">
                     {step.content.heading.map((line, li) => (
-                      <span
-                        key={li}
-                        className="block overflow-hidden"
-                        style={{
-                          transitionDelay: `${li * 80}ms`,
-                        }}
-                      >
+                      <span key={li} className="block overflow-hidden">
                         <span
                           className="inline-block"
                           style={{
-                            transform: active ? "translateY(0)" : "translateY(100%)",
-                            transition: `transform 700ms cubic-bezier(0.22,1,0.36,1) ${li * 80}ms`,
+                            transform: active ? "translateY(0)" : "translateY(105%)",
+                            transition: `transform 750ms cubic-bezier(0.22,1,0.36,1) ${li * 90}ms`,
                           }}
                         >
-                          {li === step.content.heading.length - 1 && step.content.heading.length > 1 ? (
+                          {li === step.content.heading.length - 1 &&
+                          step.content.heading.length > 1 ? (
                             <span className="text-orange">{line}</span>
                           ) : (
                             line
@@ -375,34 +378,31 @@ export function ProductScrollHero() {
                       </span>
                     ))}
                   </h2>
-                </div>
 
-                {(step.content.sub || step.content.cta) && (
-                  <div className="pointer-events-auto absolute bottom-[10%] left-0 right-0 flex flex-col items-center gap-5 px-6">
-                    {step.content.sub && (
-                      <p className="max-w-md text-sm leading-relaxed text-white/80 md:text-base">
-                        {step.content.sub}
-                      </p>
-                    )}
-                    {step.content.cta && (
-                      <div className="flex flex-wrap justify-center gap-3">
-                        <a
-                          href="#product"
-                          className="group inline-flex items-center gap-2 rounded-full bg-orange px-6 py-3 text-xs font-semibold uppercase tracking-widest text-white transition-all hover:bg-orange-glow hover:shadow-[0_20px_40px_-15px_rgba(240,82,35,0.7)]"
-                        >
-                          Discover the Flavour
-                          <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
-                        </a>
-                        <a
-                          href="#menu"
-                          className="inline-flex items-center gap-2 rounded-full border border-white/20 px-6 py-3 text-xs font-semibold uppercase tracking-widest text-white/90 transition-colors hover:bg-white/5"
-                        >
-                          Explore the Menu
-                        </a>
-                      </div>
-                    )}
-                  </div>
-                )}
+                  {step.content.sub && (
+                    <p className="mt-6 max-w-md text-sm leading-relaxed text-white/80 md:text-base mx-auto md:mx-0">
+                      {step.content.sub}
+                    </p>
+                  )}
+
+                  {isFinal && (
+                    <div className="pointer-events-auto mt-7 flex flex-wrap justify-center gap-3 md:justify-start">
+                      <a
+                        href="#product"
+                        className="group inline-flex items-center gap-2 rounded-full bg-orange px-6 py-3 text-xs font-semibold uppercase tracking-widest text-white transition-all hover:bg-orange-glow hover:shadow-[0_20px_40px_-15px_rgba(240,82,35,0.7)]"
+                      >
+                        Discover the Flavour
+                        <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+                      </a>
+                      <a
+                        href="#menu"
+                        className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 backdrop-blur-md px-6 py-3 text-xs font-semibold uppercase tracking-widest text-white/90 transition-colors hover:bg-white/10"
+                      >
+                        Explore the Menu
+                      </a>
+                    </div>
+                  )}
+                </div>
               </div>
             );
           })}
