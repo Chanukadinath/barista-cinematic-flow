@@ -1,24 +1,61 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Navigation } from "@/components/site/Navigation";
+import { ProductScrollHero } from "@/components/site/ProductScrollHero";
+import {
+  ProductIntro,
+  IngredientStory,
+  Experience,
+  Menu,
+  BrandStory,
+  Locations,
+  CrownBearers,
+  AppSection,
+  Sustainability,
+  Franchising,
+  News,
+  Newsletter,
+  Footer,
+} from "@/components/site/Sections";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
   component: Index,
+  head: () => ({
+    meta: [
+      { title: "Barista Sri Lanka — Plant-Based Almond Milk Cappuccino" },
+      {
+        name: "description",
+        content:
+          "Bold espresso, silky plant-based foam and a naturally nutty finish. Explore Barista's new Plant-Based Collection, cafés and Crown Bearers rewards.",
+      },
+      { property: "og:title", content: "Barista Sri Lanka — Plant-Based Almond Milk Cappuccino" },
+      {
+        property: "og:description",
+        content: "Cinematic coffee storytelling from Barista Sri Lanka.",
+      },
+      { property: "og:url", content: "/" },
+    ],
+    links: [{ rel: "canonical", href: "/" }],
+  }),
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
+    <main className="bg-ink text-white">
+      <Navigation />
+      <ProductScrollHero />
+      <ProductIntro />
+      <IngredientStory />
+      <Experience />
+      <Menu />
+      <BrandStory />
+      <Locations />
+      <CrownBearers />
+      <AppSection />
+      <Sustainability />
+      <Franchising />
+      <News />
+      <Newsletter />
+      <Footer />
+    </main>
   );
 }
