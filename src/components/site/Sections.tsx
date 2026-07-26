@@ -668,10 +668,11 @@ export function Franchising() {
 
 /* ---------------- SECTION 12: NEWS & STORIES ---------------- */
 const news = [
-  { cat: "Launch", date: "Jul 15, 2026", title: "Introducing the Plant-Based Almond Milk Cappuccino" },
-  { cat: "Café Update", date: "Jul 02, 2026", title: "A refreshed café concept lands in Colombo" },
-  { cat: "Community", date: "Jun 20, 2026", title: "Behind the counter with our island baristas" },
+  { cat: "Awards", date: "Jul 15, 2026", title: "BARISTA Wins Triple Honors at the National Business Excellence Awards 2025", img: awardsAsset.url },
+  { cat: "Café Update", date: "Jul 02, 2026", title: "Barista Opens Its 90th Outlet at Dambulla Road", img: cafeAsset.url },
+  { cat: "Community", date: "Jun 20, 2026", title: "Barista Opens 91st Outlet at Ministry of Brands", img: plantBasedAsset.url },
 ];
+
 
 export function News() {
   return (
