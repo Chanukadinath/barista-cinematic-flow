@@ -196,14 +196,15 @@ function Stage({ s, i }: { s: (typeof stages)[number]; i: number }) {
 
 /* ---------------- SECTION 5: SIGNATURE MENU ---------------- */
 const menu = [
-  { name: "Almond Milk Cappuccino", cat: "Featured", desc: "Bold espresso, silky plant-based foam, naturally nutty.", featured: true },
-  { name: "Cappuccino", cat: "Coffee", desc: "Classic espresso topped with velvet steamed milk foam." },
-  { name: "Iced Coffee", cat: "Cold", desc: "Chilled espresso poured over ice — bright and refreshing." },
-  { name: "Espresso", cat: "Coffee", desc: "A concentrated, aromatic single shot to sharpen your day." },
-  { name: "Frappé", cat: "Cold", desc: "Blended iced coffee with a thick, creamy crown." },
-  { name: "Tea", cat: "Brews", desc: "A curated selection of Ceylon and specialty teas." },
-  { name: "Pastries", cat: "Bites", desc: "Freshly baked pairings for every cup." },
+  { name: "Almond Milk Cappuccino", cat: "Featured", desc: "Bold espresso, silky plant-based foam, naturally nutty.", featured: true, img: iceLatteAsset.url },
+  { name: "Cappuccino", cat: "Coffee", desc: "Classic espresso topped with velvet steamed milk foam.", img: cappuccinoAsset.url },
+  { name: "Iced Coffee", cat: "Cold", desc: "Chilled espresso poured over ice — bright and refreshing.", img: icedMatchaAsset.url },
+  { name: "Espresso", cat: "Coffee", desc: "A concentrated, aromatic single shot to sharpen your day.", img: redVelvetAsset.url },
+  { name: "Frappé", cat: "Cold", desc: "Blended iced coffee with a thick, creamy crown.", img: blueberryAsset.url },
+  { name: "Tea", cat: "Brews", desc: "A curated selection of Ceylon and specialty teas.", img: strawberryAsset.url },
+  { name: "Pastries", cat: "Bites", desc: "Freshly baked pairings for every cup.", img: cupUrl },
 ];
+
 
 export function Menu() {
   return (
