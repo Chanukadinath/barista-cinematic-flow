@@ -91,7 +91,7 @@ export function ProductIntro() {
         <div className={`relative ${seen ? "reveal-up" : "opacity-0"}`} style={{ animationDelay: "0.15s" }}>
           <div className="relative aspect-[4/5] rounded-3xl overflow-hidden bg-gradient-to-b from-almond/40 via-cream to-cream border border-ink/5 shadow-[0_60px_80px_-40px_rgba(0,0,0,0.3)]">
             <div className="absolute inset-0 spotlight opacity-40" />
-            <img src={cupUrl} alt="Barista Plant-Based Almond Milk Cappuccino cup" className="absolute inset-0 m-auto h-[85%] w-auto object-contain float-soft" />
+            <img src={plantBasedAsset.url} alt="Barista Plant-Based Almond Milk Cappuccino cup" className="absolute inset-0 h-full w-full object-cover" />
             <span className="absolute top-6 left-6 rounded-full bg-orange px-3 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-white">Plant-Based</span>
             <span className="absolute bottom-6 right-6 font-display text-4xl text-ink/80">01</span>
           </div>
