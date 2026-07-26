@@ -693,13 +693,12 @@ export function News() {
         </div>
 
         <div className="mt-12 grid gap-6 md:grid-cols-3">
-          {news.map((n, i) => (
+          {news.map((n) => (
             <a key={n.title} href="#" className="group rounded-3xl overflow-hidden bg-white border border-ink/10 hover:border-orange transition-colors block">
               <div className="relative aspect-[4/3] overflow-hidden">
-                <div className={`absolute inset-0 ${i === 0 ? "bg-gradient-to-br from-orange/30 via-coffee to-ink" : i === 1 ? "bg-gradient-to-br from-almond/50 to-cream" : "bg-gradient-to-br from-coffee/40 to-almond/30"}`} />
-                <div className="absolute inset-0 spotlight opacity-40" />
-                <img src={cupUrl} alt="" className="absolute inset-0 m-auto h-[80%] w-auto object-contain transition-transform duration-700 group-hover:scale-105" />
+                <img src={n.img} alt={n.title} className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
               </div>
+
               <div className="p-6">
                 <div className="flex items-center gap-3 text-[10px] uppercase tracking-widest">
                   <span className="text-orange font-semibold">{n.cat}</span>
