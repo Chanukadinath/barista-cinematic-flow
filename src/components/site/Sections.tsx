@@ -393,22 +393,18 @@ export function Locations() {
               </button>
             </div>
 
-            {/* Map placeholder */}
-            <div className="relative mt-6 aspect-[4/3] rounded-2xl overflow-hidden bg-gradient-to-br from-almond/30 to-cream border border-ink/10">
-              <svg viewBox="0 0 400 300" className="absolute inset-0 w-full h-full opacity-70">
-                <defs>
-                  <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
-                    <path d="M20 0 L0 0 0 20" fill="none" stroke="rgba(90,46,27,0.1)" strokeWidth="0.5" />
-                  </pattern>
-                </defs>
-                <rect width="400" height="300" fill="url(#grid)" />
-                <path d="M200 40 C 240 80, 260 140, 240 200 C 220 260, 180 270, 160 240 C 140 210, 150 160, 170 120 C 180 80, 190 50, 200 40 Z" fill="rgba(240,82,35,0.15)" stroke="rgba(240,82,35,0.4)" strokeWidth="1.5" />
-              </svg>
-              {[[45, 40], [55, 55], [50, 70]].map(([x, y], i) => (
-                <span key={i} className="absolute size-3 rounded-full bg-orange ring-4 ring-orange/20" style={{ left: `${x}%`, top: `${y}%` }} />
-              ))}
-              <span className="absolute bottom-4 left-4 text-[10px] uppercase tracking-widest text-ink/50">Sri Lanka Map — Concept</span>
+            {/* Locations map */}
+            <div className="relative mt-6 aspect-[4/3] rounded-2xl overflow-hidden bg-cream border border-ink/10">
+              <img
+                src={mapAsset.url}
+                alt="Map of Sri Lanka showing Barista café locations island-wide"
+                className="absolute inset-0 h-full w-full object-cover"
+              />
+              <span className="absolute bottom-4 left-4 rounded-full bg-white/85 px-3 py-1 text-[10px] uppercase tracking-widest text-ink/70 backdrop-blur-sm">
+                Island-Wide Cafés
+              </span>
             </div>
+
           </div>
 
           <div className="flex flex-col gap-4">
