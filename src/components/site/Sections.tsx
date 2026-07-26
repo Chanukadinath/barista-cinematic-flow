@@ -27,9 +27,20 @@ import {
   Youtube,
 } from "lucide-react";
 import cupAsset from "@/assets/barista-cup.png.asset.json";
+import plantBasedAsset from "@/assets/barista1.png.asset.json";
+import iceLatteAsset from "@/assets/icelatte.png.asset.json";
+import cappuccinoAsset from "@/assets/Cappuccino.png.asset.json";
+import icedMatchaAsset from "@/assets/Iced_Matcha_Latte_-_Almond_Milk.png.asset.json";
+import redVelvetAsset from "@/assets/Red_Velvet_Oreo_Shake.png.asset.json";
+import blueberryAsset from "@/assets/Blueberry_Oreo_Shake.png.asset.json";
+import strawberryAsset from "@/assets/Strawberry_Oreo_Shake.png.asset.json";
+import cafeAsset from "@/assets/barista.jpg.asset.json";
+import mapAsset from "@/assets/barista-locations-map-2.jpg.asset.json";
+import awardsAsset from "@/assets/BARISTA_Wins_Triple_Honors_at_the_National_Business_Excellence_Awards_2025.png.asset.json";
 import { useReveal } from "@/hooks/use-reveal";
 
 const cupUrl = cupAsset.url;
+
 
 /* ---------------- SECTION 2: PRODUCT INTRO ---------------- */
 export function ProductIntro() {
