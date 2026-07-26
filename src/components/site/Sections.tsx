@@ -301,8 +301,8 @@ export function BrandStory() {
 
         <div className="lg:col-span-7 grid grid-cols-6 grid-rows-6 gap-3 min-h-[500px]">
           <div className="col-span-4 row-span-4 rounded-3xl overflow-hidden relative bg-gradient-to-br from-coffee to-ink border border-white/10">
-            <div className="absolute inset-0 spotlight opacity-60" />
-            <img src={cupUrl} alt="Barista café atmosphere" className="absolute inset-0 m-auto h-[85%] w-auto object-contain" />
+            <img src={cafeAsset.url} alt="Barista café atmosphere with hanging greenery and neon signage" className="absolute inset-0 h-full w-full object-cover" />
+
           </div>
           <div className="col-span-2 row-span-3 rounded-3xl overflow-hidden bg-orange p-6 flex flex-col justify-between text-white">
             <Coffee className="size-8" />
