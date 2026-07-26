@@ -394,11 +394,11 @@ export function Locations() {
             </div>
 
             {/* Locations map */}
-            <div className="relative mt-6 aspect-[4/3] rounded-2xl overflow-hidden bg-cream border border-ink/10">
+            <div className="relative mt-6 aspect-[4/5] rounded-2xl overflow-hidden bg-cream border border-ink/10">
               <img
                 src={mapAsset.url}
                 alt="Map of Sri Lanka showing Barista café locations island-wide"
-                className="absolute inset-0 h-full w-full object-contain p-2"
+                className="absolute inset-0 h-full w-full object-contain p-1"
               />
               <span className="absolute bottom-4 left-4 rounded-full bg-white/85 px-3 py-1 text-[10px] uppercase tracking-widest text-ink/70 backdrop-blur-sm">
                 Island-Wide Cafés
