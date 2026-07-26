@@ -27,9 +27,20 @@ import {
   Youtube,
 } from "lucide-react";
 import cupAsset from "@/assets/barista-cup.png.asset.json";
+import plantBasedAsset from "@/assets/barista1.png.asset.json";
+import iceLatteAsset from "@/assets/icelatte.png.asset.json";
+import cappuccinoAsset from "@/assets/Cappuccino.png.asset.json";
+import icedMatchaAsset from "@/assets/Iced_Matcha_Latte_-_Almond_Milk.png.asset.json";
+import redVelvetAsset from "@/assets/Red_Velvet_Oreo_Shake.png.asset.json";
+import blueberryAsset from "@/assets/Blueberry_Oreo_Shake.png.asset.json";
+import strawberryAsset from "@/assets/Strawberry_Oreo_Shake.png.asset.json";
+import cafeAsset from "@/assets/barista.jpg.asset.json";
+import mapAsset from "@/assets/barista-locations-map-2.jpg.asset.json";
+import awardsAsset from "@/assets/BARISTA_Wins_Triple_Honors_at_the_National_Business_Excellence_Awards_2025.png.asset.json";
 import { useReveal } from "@/hooks/use-reveal";
 
 const cupUrl = cupAsset.url;
+
 
 /* ---------------- SECTION 2: PRODUCT INTRO ---------------- */
 export function ProductIntro() {
@@ -80,7 +91,7 @@ export function ProductIntro() {
         <div className={`relative ${seen ? "reveal-up" : "opacity-0"}`} style={{ animationDelay: "0.15s" }}>
           <div className="relative aspect-[4/5] rounded-3xl overflow-hidden bg-gradient-to-b from-almond/40 via-cream to-cream border border-ink/5 shadow-[0_60px_80px_-40px_rgba(0,0,0,0.3)]">
             <div className="absolute inset-0 spotlight opacity-40" />
-            <img src={cupUrl} alt="Barista Plant-Based Almond Milk Cappuccino cup" className="absolute inset-0 m-auto h-[85%] w-auto object-contain float-soft" />
+            <img src={plantBasedAsset.url} alt="Barista Plant-Based Almond Milk Cappuccino cup" className="absolute inset-0 h-full w-full object-cover" />
             <span className="absolute top-6 left-6 rounded-full bg-orange px-3 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-white">Plant-Based</span>
             <span className="absolute bottom-6 right-6 font-display text-4xl text-ink/80">01</span>
           </div>
@@ -185,14 +196,15 @@ function Stage({ s, i }: { s: (typeof stages)[number]; i: number }) {
 
 /* ---------------- SECTION 5: SIGNATURE MENU ---------------- */
 const menu = [
-  { name: "Almond Milk Cappuccino", cat: "Featured", desc: "Bold espresso, silky plant-based foam, naturally nutty.", featured: true },
-  { name: "Cappuccino", cat: "Coffee", desc: "Classic espresso topped with velvet steamed milk foam." },
-  { name: "Iced Coffee", cat: "Cold", desc: "Chilled espresso poured over ice — bright and refreshing." },
-  { name: "Espresso", cat: "Coffee", desc: "A concentrated, aromatic single shot to sharpen your day." },
-  { name: "Frappé", cat: "Cold", desc: "Blended iced coffee with a thick, creamy crown." },
-  { name: "Tea", cat: "Brews", desc: "A curated selection of Ceylon and specialty teas." },
-  { name: "Pastries", cat: "Bites", desc: "Freshly baked pairings for every cup." },
+  { name: "Almond Milk Cappuccino", cat: "Featured", desc: "Bold espresso, silky plant-based foam, naturally nutty.", featured: true, img: iceLatteAsset.url },
+  { name: "Cappuccino", cat: "Coffee", desc: "Classic espresso topped with velvet steamed milk foam.", img: cappuccinoAsset.url },
+  { name: "Iced Coffee", cat: "Cold", desc: "Chilled espresso poured over ice — bright and refreshing.", img: icedMatchaAsset.url },
+  { name: "Espresso", cat: "Coffee", desc: "A concentrated, aromatic single shot to sharpen your day.", img: redVelvetAsset.url },
+  { name: "Frappé", cat: "Cold", desc: "Blended iced coffee with a thick, creamy crown.", img: blueberryAsset.url },
+  { name: "Tea", cat: "Brews", desc: "A curated selection of Ceylon and specialty teas.", img: strawberryAsset.url },
+  { name: "Pastries", cat: "Bites", desc: "Freshly baked pairings for every cup.", img: cupUrl },
 ];
+
 
 export function Menu() {
   return (
@@ -235,12 +247,10 @@ function MenuCard({ m }: { m: (typeof menu)[number] }) {
       } ${seen ? "reveal-up" : "opacity-0"}`}
     >
       <div className="relative aspect-[16/10] overflow-hidden">
-        <div className={`absolute inset-0 ${m.featured ? "bg-gradient-to-br from-orange/30 via-ink to-ink" : "bg-gradient-to-br from-almond/40 to-cream"}`} />
-        <div className="absolute inset-0 spotlight opacity-50" />
         <img
-          src={cupUrl}
+          src={m.img}
           alt={m.name}
-          className="absolute inset-0 m-auto h-[85%] w-auto object-contain transition-transform duration-700 group-hover:scale-105"
+          className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
         />
         {m.featured && (
           <span className="absolute top-5 left-5 rounded-full bg-orange px-3 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-white">
@@ -248,6 +258,7 @@ function MenuCard({ m }: { m: (typeof menu)[number] }) {
           </span>
         )}
       </div>
+
       <div className="p-6 flex items-start justify-between gap-4">
         <div>
           <div className={`text-[10px] font-semibold uppercase tracking-widest ${m.featured ? "text-orange" : "text-orange"}`}>{m.cat}</div>
@@ -290,8 +301,8 @@ export function BrandStory() {
 
         <div className="lg:col-span-7 grid grid-cols-6 grid-rows-6 gap-3 min-h-[500px]">
           <div className="col-span-4 row-span-4 rounded-3xl overflow-hidden relative bg-gradient-to-br from-coffee to-ink border border-white/10">
-            <div className="absolute inset-0 spotlight opacity-60" />
-            <img src={cupUrl} alt="Barista café atmosphere" className="absolute inset-0 m-auto h-[85%] w-auto object-contain" />
+            <img src={cafeAsset.url} alt="Barista café atmosphere with hanging greenery and neon signage" className="absolute inset-0 h-full w-full object-cover" />
+
           </div>
           <div className="col-span-2 row-span-3 rounded-3xl overflow-hidden bg-orange p-6 flex flex-col justify-between text-white">
             <Coffee className="size-8" />
@@ -382,22 +393,18 @@ export function Locations() {
               </button>
             </div>
 
-            {/* Map placeholder */}
-            <div className="relative mt-6 aspect-[4/3] rounded-2xl overflow-hidden bg-gradient-to-br from-almond/30 to-cream border border-ink/10">
-              <svg viewBox="0 0 400 300" className="absolute inset-0 w-full h-full opacity-70">
-                <defs>
-                  <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
-                    <path d="M20 0 L0 0 0 20" fill="none" stroke="rgba(90,46,27,0.1)" strokeWidth="0.5" />
-                  </pattern>
-                </defs>
-                <rect width="400" height="300" fill="url(#grid)" />
-                <path d="M200 40 C 240 80, 260 140, 240 200 C 220 260, 180 270, 160 240 C 140 210, 150 160, 170 120 C 180 80, 190 50, 200 40 Z" fill="rgba(240,82,35,0.15)" stroke="rgba(240,82,35,0.4)" strokeWidth="1.5" />
-              </svg>
-              {[[45, 40], [55, 55], [50, 70]].map(([x, y], i) => (
-                <span key={i} className="absolute size-3 rounded-full bg-orange ring-4 ring-orange/20" style={{ left: `${x}%`, top: `${y}%` }} />
-              ))}
-              <span className="absolute bottom-4 left-4 text-[10px] uppercase tracking-widest text-ink/50">Sri Lanka Map — Concept</span>
+            {/* Locations map */}
+            <div className="relative mt-6 aspect-[4/5] rounded-2xl overflow-hidden bg-cream border border-ink/10">
+              <img
+                src={mapAsset.url}
+                alt="Map of Sri Lanka showing Barista café locations island-wide"
+                className="absolute inset-0 h-full w-full object-contain p-1"
+              />
+              <span className="absolute bottom-4 left-4 rounded-full bg-white/85 px-3 py-1 text-[10px] uppercase tracking-widest text-ink/70 backdrop-blur-sm">
+                Island-Wide Cafés
+              </span>
             </div>
+
           </div>
 
           <div className="flex flex-col gap-4">
@@ -661,10 +668,11 @@ export function Franchising() {
 
 /* ---------------- SECTION 12: NEWS & STORIES ---------------- */
 const news = [
-  { cat: "Launch", date: "Jul 15, 2026", title: "Introducing the Plant-Based Almond Milk Cappuccino" },
-  { cat: "Café Update", date: "Jul 02, 2026", title: "A refreshed café concept lands in Colombo" },
-  { cat: "Community", date: "Jun 20, 2026", title: "Behind the counter with our island baristas" },
+  { cat: "Awards", date: "Jul 15, 2026", title: "BARISTA Wins Triple Honors at the National Business Excellence Awards 2025", img: awardsAsset.url },
+  { cat: "Café Update", date: "Jul 02, 2026", title: "Barista Opens Its 90th Outlet at Dambulla Road", img: cafeAsset.url },
+  { cat: "Community", date: "Jun 20, 2026", title: "Barista Opens 91st Outlet at Ministry of Brands", img: plantBasedAsset.url },
 ];
+
 
 export function News() {
   return (
@@ -685,13 +693,12 @@ export function News() {
         </div>
 
         <div className="mt-12 grid gap-6 md:grid-cols-3">
-          {news.map((n, i) => (
+          {news.map((n) => (
             <a key={n.title} href="#" className="group rounded-3xl overflow-hidden bg-white border border-ink/10 hover:border-orange transition-colors block">
               <div className="relative aspect-[4/3] overflow-hidden">
-                <div className={`absolute inset-0 ${i === 0 ? "bg-gradient-to-br from-orange/30 via-coffee to-ink" : i === 1 ? "bg-gradient-to-br from-almond/50 to-cream" : "bg-gradient-to-br from-coffee/40 to-almond/30"}`} />
-                <div className="absolute inset-0 spotlight opacity-40" />
-                <img src={cupUrl} alt="" className="absolute inset-0 m-auto h-[80%] w-auto object-contain transition-transform duration-700 group-hover:scale-105" />
+                <img src={n.img} alt={n.title} className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
               </div>
+
               <div className="p-6">
                 <div className="flex items-center gap-3 text-[10px] uppercase tracking-widest">
                   <span className="text-orange font-semibold">{n.cat}</span>
