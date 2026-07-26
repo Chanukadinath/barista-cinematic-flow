@@ -35,6 +35,8 @@ import redVelvetAsset from "@/assets/Red_Velvet_Oreo_Shake.png.asset.json";
 import blueberryAsset from "@/assets/Blueberry_Oreo_Shake.png.asset.json";
 import strawberryAsset from "@/assets/Strawberry_Oreo_Shake.png.asset.json";
 import cafeAsset from "@/assets/barista.jpg.asset.json";
+import maharagamaAsset from "@/assets/maharagama-diner.png.asset.json";
+import ministryAsset from "@/assets/ministry-of-brands.png.asset.json";
 import mapAsset from "@/assets/barista-locations-map-2.jpg.asset.json";
 import awardsAsset from "@/assets/BARISTA_Wins_Triple_Honors_at_the_National_Business_Excellence_Awards_2025.png.asset.json";
 import { useReveal } from "@/hooks/use-reveal";
@@ -669,8 +671,8 @@ export function Franchising() {
 /* ---------------- SECTION 12: NEWS & STORIES ---------------- */
 const news = [
   { cat: "Awards", date: "Jul 15, 2026", title: "BARISTA Wins Triple Honors at the National Business Excellence Awards 2025", img: awardsAsset.url },
-  { cat: "Café Update", date: "Jul 02, 2026", title: "Barista Opens Its 90th Outlet at Dambulla Road", img: cafeAsset.url },
-  { cat: "Community", date: "Jun 20, 2026", title: "Barista Opens 91st Outlet at Ministry of Brands", img: plantBasedAsset.url },
+  { cat: "Café Update", date: "Jul 02, 2026", title: "Barista Opens Its 90th Outlet at Dambulla Road", img: maharagamaAsset.url },
+  { cat: "Community", date: "Jun 20, 2026", title: "Barista Opens 91st Outlet at Ministry of Brands", img: ministryAsset.url },
 ];
 
 
