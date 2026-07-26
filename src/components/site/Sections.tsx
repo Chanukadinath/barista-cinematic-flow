@@ -247,12 +247,10 @@ function MenuCard({ m }: { m: (typeof menu)[number] }) {
       } ${seen ? "reveal-up" : "opacity-0"}`}
     >
       <div className="relative aspect-[16/10] overflow-hidden">
-        <div className={`absolute inset-0 ${m.featured ? "bg-gradient-to-br from-orange/30 via-ink to-ink" : "bg-gradient-to-br from-almond/40 to-cream"}`} />
-        <div className="absolute inset-0 spotlight opacity-50" />
         <img
-          src={cupUrl}
+          src={m.img}
           alt={m.name}
-          className="absolute inset-0 m-auto h-[85%] w-auto object-contain transition-transform duration-700 group-hover:scale-105"
+          className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
         />
         {m.featured && (
           <span className="absolute top-5 left-5 rounded-full bg-orange px-3 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-white">
@@ -260,6 +258,7 @@ function MenuCard({ m }: { m: (typeof menu)[number] }) {
           </span>
         )}
       </div>
+
       <div className="p-6 flex items-start justify-between gap-4">
         <div>
           <div className={`text-[10px] font-semibold uppercase tracking-widest ${m.featured ? "text-orange" : "text-orange"}`}>{m.cat}</div>
