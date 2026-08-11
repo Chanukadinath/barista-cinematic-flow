@@ -534,22 +534,15 @@ export function AppSection() {
               </li>
             ))}
           </ul>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <a href="#" className="inline-flex items-center gap-3 rounded-2xl bg-ink px-5 py-3 text-left hover:bg-black transition-colors">
-              <Apple className="size-6" />
-              <div>
-                <div className="text-[10px] opacity-70 uppercase tracking-widest">Download on</div>
-                <div className="font-semibold text-sm">App Store</div>
-              </div>
+          <div className="mt-8 flex flex-wrap items-center gap-4">
+            <a href="#" aria-label="Download on the App Store" className="block rounded-xl bg-white px-3 py-2 hover:opacity-90 transition-opacity">
+              <img src={appStoreAsset.url} alt="Download on the App Store" className="h-9 w-auto object-contain" />
             </a>
-            <a href="#" className="inline-flex items-center gap-3 rounded-2xl bg-ink px-5 py-3 text-left hover:bg-black transition-colors">
-              <PlayCircle className="size-6" />
-              <div>
-                <div className="text-[10px] opacity-70 uppercase tracking-widest">Get it on</div>
-                <div className="font-semibold text-sm">Google Play</div>
-              </div>
+            <a href="#" aria-label="Android app on Google Play" className="block rounded-xl bg-white px-3 py-2 hover:opacity-90 transition-opacity">
+              <img src={googlePlayAsset.url} alt="Android app on Google Play" className="h-9 w-auto object-contain" />
             </a>
           </div>
+
         </div>
 
         {/* Phone mockup */}
