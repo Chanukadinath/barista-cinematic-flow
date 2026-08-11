@@ -762,22 +762,15 @@ export function Footer() {
                 <Youtube className="size-4" />
               </a>
             </div>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <a href="#" className="inline-flex items-center gap-2 rounded-xl bg-white/5 border border-white/10 px-4 py-2.5 text-white hover:bg-white/10 transition-colors">
-                <Apple className="size-5" />
-                <div className="text-left">
-                  <div className="text-[9px] opacity-70 uppercase tracking-widest">App Store</div>
-                  <div className="text-xs font-semibold">Download</div>
-                </div>
+            <div className="mt-8 flex flex-wrap items-center gap-4">
+              <a href="#" aria-label="Download on the App Store" className="block rounded-xl bg-white px-3 py-2 hover:opacity-90 transition-opacity">
+                <img src={appStoreAsset.url} alt="Download on the App Store" className="h-8 w-auto object-contain" />
               </a>
-              <a href="#" className="inline-flex items-center gap-2 rounded-xl bg-white/5 border border-white/10 px-4 py-2.5 text-white hover:bg-white/10 transition-colors">
-                <PlayCircle className="size-5" />
-                <div className="text-left">
-                  <div className="text-[9px] opacity-70 uppercase tracking-widest">Google Play</div>
-                  <div className="text-xs font-semibold">Get App</div>
-                </div>
+              <a href="#" aria-label="Android app on Google Play" className="block rounded-xl bg-white px-3 py-2 hover:opacity-90 transition-opacity">
+                <img src={googlePlayAsset.url} alt="Android app on Google Play" className="h-8 w-auto object-contain" />
               </a>
             </div>
+
           </div>
 
           <div className="lg:col-span-2">
