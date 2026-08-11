@@ -14,8 +14,6 @@ import {
   Gift,
   Star,
   Smartphone,
-  Apple,
-  PlayCircle,
   Recycle,
   Users,
   Heart,
