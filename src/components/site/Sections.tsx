@@ -654,15 +654,6 @@ export function Franchising() {
             </a>
           </div>
         </div>
-        <div className="hidden lg:flex justify-center">
-          <div className="relative">
-            <div className="absolute inset-0 spotlight opacity-90" />
-            <Building2 className="size-72 text-white/10" strokeWidth={0.5} />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <img src={cupUrl} alt="" className="h-64 w-auto object-contain float-soft drop-shadow-[0_30px_50px_rgba(0,0,0,0.6)]" />
-            </div>
-          </div>
-        </div>
       </div>
     </section>
   );
