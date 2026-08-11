@@ -19,7 +19,6 @@ import {
   Recycle,
   Users,
   Heart,
-  Building2,
   Mail,
   Phone,
   Instagram,
