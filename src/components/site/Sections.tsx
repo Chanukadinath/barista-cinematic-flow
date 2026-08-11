@@ -22,6 +22,8 @@ import {
   Instagram,
   Facebook,
   Youtube,
+  Apple,
+  PlayCircle,
 } from "lucide-react";
 import cupAsset from "@/assets/barista-cup.png.asset.json";
 import plantBasedAsset from "@/assets/barista1.png.asset.json";
@@ -36,8 +38,6 @@ import maharagamaAsset from "@/assets/maharagama-diner.png.asset.json";
 import ministryAsset from "@/assets/ministry-of-brands.png.asset.json";
 import mapAsset from "@/assets/barista-locations-map-2.jpg.asset.json";
 import awardsAsset from "@/assets/BARISTA_Wins_Triple_Honors_at_the_National_Business_Excellence_Awards_2025.png.asset.json";
-import appStoreAsset from "@/assets/app-store-badge.png.asset.json";
-import googlePlayAsset from "@/assets/google-play-badge.png.asset.json";
 import { useReveal } from "@/hooks/use-reveal";
 
 const cupUrl = cupAsset.url;
@@ -535,11 +535,13 @@ export function AppSection() {
             ))}
           </ul>
           <div className="mt-8 flex flex-wrap items-center gap-4">
-            <a href="#" aria-label="Download on the App Store" className="block rounded-xl bg-white px-3 py-2 hover:opacity-90 transition-opacity">
-              <img src={appStoreAsset.url} alt="Download on the App Store" className="h-9 w-auto object-contain" />
+            <a href="#" className="inline-flex items-center gap-3 rounded-full bg-ink px-5 py-3 text-white hover:bg-ink-2 transition-colors">
+              <Apple className="size-5" />
+              <span className="text-xs font-semibold uppercase tracking-widest">App Store</span>
             </a>
-            <a href="#" aria-label="Android app on Google Play" className="block rounded-xl bg-white px-3 py-2 hover:opacity-90 transition-opacity">
-              <img src={googlePlayAsset.url} alt="Android app on Google Play" className="h-9 w-auto object-contain" />
+            <a href="#" className="inline-flex items-center gap-3 rounded-full bg-white px-5 py-3 text-ink hover:bg-cream transition-colors">
+              <PlayCircle className="size-5" />
+              <span className="text-xs font-semibold uppercase tracking-widest">Google Play</span>
             </a>
           </div>
 
@@ -763,11 +765,13 @@ export function Footer() {
               </a>
             </div>
             <div className="mt-8 flex flex-wrap items-center gap-4">
-              <a href="#" aria-label="Download on the App Store" className="block rounded-xl bg-white px-3 py-2 hover:opacity-90 transition-opacity">
-                <img src={appStoreAsset.url} alt="Download on the App Store" className="h-8 w-auto object-contain" />
+              <a href="#" className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2.5 text-ink hover:bg-cream transition-colors">
+                <Apple className="size-4" />
+                <span className="text-[11px] font-semibold uppercase tracking-widest">App Store</span>
               </a>
-              <a href="#" aria-label="Android app on Google Play" className="block rounded-xl bg-white px-3 py-2 hover:opacity-90 transition-opacity">
-                <img src={googlePlayAsset.url} alt="Android app on Google Play" className="h-8 w-auto object-contain" />
+              <a href="#" className="inline-flex items-center gap-2 rounded-full border border-white/20 px-4 py-2.5 text-white hover:bg-white/10 transition-colors">
+                <PlayCircle className="size-4" />
+                <span className="text-[11px] font-semibold uppercase tracking-widest">Google Play</span>
               </a>
             </div>
 
