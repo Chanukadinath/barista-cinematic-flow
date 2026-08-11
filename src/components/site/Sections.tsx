@@ -14,8 +14,6 @@ import {
   Gift,
   Star,
   Smartphone,
-  Apple,
-  PlayCircle,
   Recycle,
   Users,
   Heart,
@@ -38,6 +36,8 @@ import maharagamaAsset from "@/assets/maharagama-diner.png.asset.json";
 import ministryAsset from "@/assets/ministry-of-brands.png.asset.json";
 import mapAsset from "@/assets/barista-locations-map-2.jpg.asset.json";
 import awardsAsset from "@/assets/BARISTA_Wins_Triple_Honors_at_the_National_Business_Excellence_Awards_2025.png.asset.json";
+import appStoreAsset from "@/assets/app-store-badge.png.asset.json";
+import googlePlayAsset from "@/assets/google-play-badge.png.asset.json";
 import { useReveal } from "@/hooks/use-reveal";
 
 const cupUrl = cupAsset.url;
@@ -534,22 +534,15 @@ export function AppSection() {
               </li>
             ))}
           </ul>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <a href="#" className="inline-flex items-center gap-3 rounded-2xl bg-ink px-5 py-3 text-left hover:bg-black transition-colors">
-              <Apple className="size-6" />
-              <div>
-                <div className="text-[10px] opacity-70 uppercase tracking-widest">Download on</div>
-                <div className="font-semibold text-sm">App Store</div>
-              </div>
+          <div className="mt-8 flex flex-wrap items-center gap-4">
+            <a href="#" aria-label="Download on the App Store" className="block rounded-xl bg-white px-3 py-2 hover:opacity-90 transition-opacity">
+              <img src={appStoreAsset.url} alt="Download on the App Store" className="h-9 w-auto object-contain" />
             </a>
-            <a href="#" className="inline-flex items-center gap-3 rounded-2xl bg-ink px-5 py-3 text-left hover:bg-black transition-colors">
-              <PlayCircle className="size-6" />
-              <div>
-                <div className="text-[10px] opacity-70 uppercase tracking-widest">Get it on</div>
-                <div className="font-semibold text-sm">Google Play</div>
-              </div>
+            <a href="#" aria-label="Android app on Google Play" className="block rounded-xl bg-white px-3 py-2 hover:opacity-90 transition-opacity">
+              <img src={googlePlayAsset.url} alt="Android app on Google Play" className="h-9 w-auto object-contain" />
             </a>
           </div>
+
         </div>
 
         {/* Phone mockup */}
@@ -769,22 +762,15 @@ export function Footer() {
                 <Youtube className="size-4" />
               </a>
             </div>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <a href="#" className="inline-flex items-center gap-2 rounded-xl bg-white/5 border border-white/10 px-4 py-2.5 text-white hover:bg-white/10 transition-colors">
-                <Apple className="size-5" />
-                <div className="text-left">
-                  <div className="text-[9px] opacity-70 uppercase tracking-widest">App Store</div>
-                  <div className="text-xs font-semibold">Download</div>
-                </div>
+            <div className="mt-8 flex flex-wrap items-center gap-4">
+              <a href="#" aria-label="Download on the App Store" className="block rounded-xl bg-white px-3 py-2 hover:opacity-90 transition-opacity">
+                <img src={appStoreAsset.url} alt="Download on the App Store" className="h-8 w-auto object-contain" />
               </a>
-              <a href="#" className="inline-flex items-center gap-2 rounded-xl bg-white/5 border border-white/10 px-4 py-2.5 text-white hover:bg-white/10 transition-colors">
-                <PlayCircle className="size-5" />
-                <div className="text-left">
-                  <div className="text-[9px] opacity-70 uppercase tracking-widest">Google Play</div>
-                  <div className="text-xs font-semibold">Get App</div>
-                </div>
+              <a href="#" aria-label="Android app on Google Play" className="block rounded-xl bg-white px-3 py-2 hover:opacity-90 transition-opacity">
+                <img src={googlePlayAsset.url} alt="Android app on Google Play" className="h-8 w-auto object-contain" />
               </a>
             </div>
+
           </div>
 
           <div className="lg:col-span-2">
