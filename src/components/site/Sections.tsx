@@ -22,6 +22,8 @@ import {
   Instagram,
   Facebook,
   Youtube,
+  Apple,
+  PlayCircle,
 } from "lucide-react";
 import cupAsset from "@/assets/barista-cup.png.asset.json";
 import plantBasedAsset from "@/assets/barista1.png.asset.json";
@@ -36,8 +38,6 @@ import maharagamaAsset from "@/assets/maharagama-diner.png.asset.json";
 import ministryAsset from "@/assets/ministry-of-brands.png.asset.json";
 import mapAsset from "@/assets/barista-locations-map-2.jpg.asset.json";
 import awardsAsset from "@/assets/BARISTA_Wins_Triple_Honors_at_the_National_Business_Excellence_Awards_2025.png.asset.json";
-import appStoreAsset from "@/assets/app-store-badge.png.asset.json";
-import googlePlayAsset from "@/assets/google-play-badge.png.asset.json";
 import { useReveal } from "@/hooks/use-reveal";
 
 const cupUrl = cupAsset.url;
